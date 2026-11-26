@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "PowerShell(git -C api log --oneline -1; Write-Output \"exit: $LASTEXITCODE\"; git -C api status --short | Select-Object -First 5)",
+      "PowerShell(Remove-Item -Recurse -Force api\\\\.git -Confirm:$false; Rename-Item .gitgnore .gitignore; \\(Get-Content .gitignore\\) -replace '^/\\(dist|node_modules|build|coverage|\\\\.nyc_output|\\\\.idea\\)$', '$1' | Set-Content .gitignore -Encoding utf8; git status --short --untracked-files=normal)",
+      "PowerShell($f = git add --dry-run . ; Write-Output \"arquivos a adicionar: $\\($f.Count\\)\"; $f | Select-String 'node_modules|dist|bolao|ssh\\\\.md|\\\\.env' | Select-Object -First 5)"
+    ]
+  }
+}
