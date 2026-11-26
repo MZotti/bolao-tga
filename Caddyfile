@@ -1,14 +1,35 @@
 {$DOMAIN} {
 	encode zstd gzip
 
-	# Backend NestJS (que usará o prefixo global "api")
-	handle /api/* {
+	# Headers de segurança para todas as respostas
+	header {
+		Strict-Transport-Security "max-age=31536000"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		-Server
+	}
+
+	# Backend NestJS (que usa o prefixo global "api").
+	# "/api" exato também, senão ele cairia no front.
+	@api path /api /api/*
+	handle @api {
 		reverse_proxy api:3000
 	}
 
-	# Front React (SPA): rotas desconhecidas caem no index.html
+	# Front React (SPA)
 	handle {
 		root * /srv
+
+		# Arquivos com hash no nome (JS, CSS, fontes): cache longo no navegador
+		@assets path /assets/*
+		header @assets Cache-Control "public, max-age=31536000, immutable"
+
+		# O resto (index.html) é sempre revalidado, para todos pegarem um deploy novo
+		@notAssets not path /assets/*
+		header @notAssets Cache-Control "no-cache"
+
+		# Rotas do React Router (/palpites, /ranking...) caem no index.html
 		try_files {path} /index.html
 		file_server
 	}

@@ -8,6 +8,10 @@ generator client {
   output       = "../src/generated/prisma"
   // O Nest compila para CommonJS
   moduleFormat = "cjs"
+  // Imports com ".js" no client gerado. Fixado aqui porque, sem isso, o Prisma
+  // deduz a extensão pelo tsconfig, e um ambiente sem tsconfig (ex.: build do
+  // Docker) gerava imports ".ts", que quebram depois de compilados.
+  importFileExtension = "js"
 }
 
 datasource db {

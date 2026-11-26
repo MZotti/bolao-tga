@@ -84,3 +84,7 @@ ssh.md
 bolao
 bolao.pub
 *.local.json
+# Backups do banco gerados na VPS (scripts/backup-db.sh)
+backups/
+*/*.local.json
+settings.local.json

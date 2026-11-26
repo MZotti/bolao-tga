@@ -1,0 +1,15 @@
+# Não enviar para o build do Docker
+node_modules
+dist
+coverage
+src/generated
+test
+*.log
+
+# Segredos locais (o container recebe as variáveis pelo docker-compose)
+.env
+.env.*
+!.env.example
+
+Dockerfile
+.dockerignore

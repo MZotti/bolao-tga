@@ -1,0 +1,4 @@
+# Scripts de shell precisam de quebra de linha LF para rodar no Linux (VPS/Docker),
+# mesmo quando o repositório é editado no Windows.
+*.sh text eol=lf
+Dockerfile text eol=lf

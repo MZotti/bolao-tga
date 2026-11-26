@@ -11,7 +11,8 @@ import {
 import { toNormalizedEmail, toTrimmed } from '../../common/normalize';
 import { Role } from '../../generated/prisma/client';
 
-export class CreateUserDto {
+/** Campos comuns a qualquer criação de usuário (admin ou cadastro público). */
+export class UserFieldsDto {
   @Transform(toTrimmed)
   @IsString()
   @Length(1, 50)
@@ -23,10 +24,13 @@ export class CreateUserDto {
   email!: string;
 
   @IsString()
-  @MinLength(8)
+  @MinLength(8, { message: 'a senha deve ter pelo menos 8 caracteres' })
   @MaxLength(200)
   password!: string;
+}
 
+/** Criação pelo admin (POST /api/users): pode escolher a role. */
+export class CreateUserDto extends UserFieldsDto {
   @IsOptional()
   @IsEnum(Role)
   role?: Role;
