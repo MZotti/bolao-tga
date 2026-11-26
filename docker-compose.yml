@@ -1,0 +1,51 @@
+# Ambiente de PRODUÇÃO (VPS).
+# Requer um arquivo .env na raiz (veja .env.example).
+#
+# Uso na VPS:
+#   docker compose up -d
+#   docker compose logs -f
+
+# Nome fixo: os volumes ficam "bolao-tga_*", reaproveitando o certificado
+# que o Caddy já emitiu na VPS.
+name: bolao-tga
+
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-bolao}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?defina POSTGRES_PASSWORD no .env}
+      POSTGRES_DB: ${POSTGRES_DB:-bolao}
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    # SEM "ports" de propósito: o banco só é acessível pela rede interna do compose.
+    # (O Docker ignora o ufw para portas publicadas.)
+
+  # TODO: serviço "api" (NestJS) será adicionado quando o Dockerfile da API existir.
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    environment:
+      DOMAIN: ${DOMAIN:?defina DOMAIN no .env}
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      # Temporário: build do front gerado com "yarn build" em web/.
+      # Depois será substituído por um build multi-stage dentro da imagem.
+      - ./web/dist:/srv:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+volumes:
+  pgdata:
+  caddy_data:
+  caddy_config:

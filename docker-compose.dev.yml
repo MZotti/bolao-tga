@@ -1,0 +1,33 @@
+# Ambiente de DESENVOLVIMENTO local: apenas o Postgres.
+# A API (yarn start:dev) e o front (yarn dev) rodam direto na máquina.
+#
+# Uso:
+#   docker compose -f docker-compose.dev.yml up -d
+#   docker compose -f docker-compose.dev.yml down        # para (mantém os dados)
+#   docker compose -f docker-compose.dev.yml down -v     # para e APAGA os dados
+
+name: bolao-tga-dev
+
+services:
+  db:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bolao
+      POSTGRES_PASSWORD: bolao
+      POSTGRES_DB: bolao
+    ports:
+      # Exposto só em localhost; as credenciais simples acima são aceitáveis por isso.
+      # Porta 5433 no host para não conflitar com outros Postgres locais.
+      - "127.0.0.1:5433:5432"
+    volumes:
+      # A partir do Postgres 18 o volume é montado em /var/lib/postgresql (não mais em /data).
+      - pgdata_dev:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  pgdata_dev:

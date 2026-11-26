@@ -1,0 +1,15 @@
+{$DOMAIN} {
+	encode zstd gzip
+
+	# Backend NestJS (que usará o prefixo global "api")
+	handle /api/* {
+		reverse_proxy api:3000
+	}
+
+	# Front React (SPA): rotas desconhecidas caem no index.html
+	handle {
+		root * /srv
+		try_files {path} /index.html
+		file_server
+	}
+}

@@ -1,0 +1,313 @@
+{
+  "edition": "The Game Awards 2026",
+  "ceremony": "2026-12-10T19:30:00-05:00",
+  "sources": [
+    "https://gameinformer.com/2026/11/17/here-are-the-nominees-for-the-game-awards-2026",
+    "https://nintendoeverything.com/the-game-awards-2026-nominees-announced-full-list-zelda-ocarina-of-time-nominated-for-game-of-the-year-and-more/"
+  ],
+  "notes": "Categorias de e-sports (Best Esports Game, Best Esports Athlete, Best Esports Team) foram excluidas de proposito.",
+  "categories": [
+    {
+      "slug": "game-of-the-year",
+      "name": "Jogo do Ano",
+      "isGoty": true,
+      "nominees": [
+        { "name": "007 First Light", "subtitle": "IO Interactive" },
+        { "name": "Control Resonant", "subtitle": "Remedy / Annapurna" },
+        { "name": "Grand Theft Auto VI", "subtitle": "Rockstar Games" },
+        { "name": "Phantom Blade Zero", "subtitle": "S-GAME" },
+        { "name": "Resident Evil Requiem", "subtitle": "Capcom" },
+        { "name": "The Legend of Zelda: Ocarina of Time", "subtitle": "Nintendo" }
+      ]
+    },
+    {
+      "slug": "best-game-direction",
+      "name": "Melhor Direção de Jogo",
+      "nominees": [
+        { "name": "Control Resonant", "subtitle": "Remedy / Annapurna" },
+        { "name": "Grand Theft Auto VI", "subtitle": "Rockstar Games" },
+        { "name": "Phantom Blade Zero", "subtitle": "S-GAME" },
+        { "name": "Pragmata", "subtitle": "Capcom" },
+        { "name": "Resident Evil Requiem", "subtitle": "Capcom" }
+      ]
+    },
+    {
+      "slug": "best-narrative",
+      "name": "Melhor Narrativa",
+      "nominees": [
+        { "name": "007 First Light", "subtitle": "IO Interactive" },
+        { "name": "Control Resonant", "subtitle": "Remedy / Annapurna" },
+        { "name": "Grand Theft Auto VI", "subtitle": "Rockstar Games" },
+        { "name": "Resident Evil Requiem", "subtitle": "Capcom" },
+        { "name": "The Blood of Dawnwalker", "subtitle": "Rebel Wolves / Bandai Namco" }
+      ]
+    },
+    {
+      "slug": "best-art-direction",
+      "name": "Melhor Direção de Arte",
+      "nominees": [
+        { "name": "Control Resonant", "subtitle": "Remedy / Annapurna" },
+        { "name": "Grand Theft Auto VI", "subtitle": "Rockstar Games" },
+        { "name": "Mouse: P.I. For Hire", "subtitle": "Fumi / PlaySide" },
+        { "name": "Phantom Blade Zero", "subtitle": "S-GAME" },
+        { "name": "The Legend of Zelda: Ocarina of Time", "subtitle": "Nintendo" }
+      ]
+    },
+    {
+      "slug": "best-score-and-music",
+      "name": "Melhor Trilha Sonora e Música",
+      "nominees": [
+        { "name": "Ace Combat 8: Wings of Theve", "subtitle": "Bandai Namco Aces / Bandai Namco" },
+        { "name": "Grand Theft Auto VI", "subtitle": "Rockstar Games" },
+        { "name": "Mixtape", "subtitle": "Beethoven & Dinosaur / Annapurna" },
+        { "name": "Phantom Blade Zero", "subtitle": "S-GAME" },
+        { "name": "The Legend of Zelda: Ocarina of Time", "subtitle": "Nintendo" }
+      ]
+    },
+    {
+      "slug": "best-audio-design",
+      "name": "Melhor Design de Áudio",
+      "nominees": [
+        { "name": "Ace Combat 8: Wings of Theve", "subtitle": "Bandai Namco Aces / Bandai Namco" },
+        { "name": "Control Resonant", "subtitle": "Remedy / Annapurna" },
+        { "name": "Grand Theft Auto VI", "subtitle": "Rockstar Games" },
+        { "name": "Resident Evil Requiem", "subtitle": "Capcom" },
+        { "name": "Star Wars: Galactic Racer", "subtitle": "Fuse Games / Secret Mode" }
+      ]
+    },
+    {
+      "slug": "best-performance",
+      "name": "Melhor Atuação",
+      "nominees": [
+        { "name": "Angela Sant'Albano", "subtitle": "Grace Ashcroft — Resident Evil Requiem" },
+        { "name": "Liam McIntyre", "subtitle": "Wolverine — Marvel's Wolverine" },
+        { "name": "Manni L. Perez", "subtitle": "Lucia Caminos — Grand Theft Auto VI" },
+        { "name": "Patrick Gibson", "subtitle": "James Bond — 007 First Light" },
+        { "name": "Rahul Kohli", "subtitle": "Arjun Devraj — Saros" }
+      ]
+    },
+    {
+      "slug": "best-independent-game",
+      "name": "Melhor Jogo Independente",
+      "nominees": [
+        { "name": "Big Walk", "subtitle": "House House / Panic" },
+        { "name": "Cairn", "subtitle": "The Game Bakers" },
+        { "name": "Denshattack!", "subtitle": "Undercoders / Fireshine Games" },
+        { "name": "Mewgenics", "subtitle": "Edmund McMillen e Tyler Glaiel" },
+        { "name": "Mina the Hollower", "subtitle": "Yacht Club Games" }
+      ]
+    },
+    {
+      "slug": "best-debut-indie-game",
+      "name": "Melhor Estreia Indie",
+      "nominees": [
+        { "name": "Dressmaker", "subtitle": "Cozy Lives / Free Lives" },
+        { "name": "Esoteric Ebb", "subtitle": "Christoffer Bodegård / Raw Fury" },
+        { "name": "Orbitals", "subtitle": "Shapefarm / Kepler" },
+        { "name": "Replaced", "subtitle": "Sad Cat Studios / Thunderful" },
+        { "name": "Silver Pines", "subtitle": "Wych Elm / Team17" }
+      ]
+    },
+    {
+      "slug": "games-for-impact",
+      "name": "Games for Impact",
+      "nominees": [
+        { "name": "Big Walk", "subtitle": "House House / Panic" },
+        { "name": "Cairn", "subtitle": "The Game Bakers" },
+        { "name": "Forever Ago", "subtitle": "Third Shift / Annapurna" },
+        { "name": "Life is Strange: Reunion", "subtitle": "Deck Nine / Square Enix" },
+        { "name": "lily's world XD", "subtitle": "SonderingEmily / Kwalee" },
+        { "name": "Mixtape", "subtitle": "Beethoven & Dinosaur / Annapurna" }
+      ]
+    },
+    {
+      "slug": "best-action-game",
+      "name": "Melhor Jogo de Ação",
+      "nominees": [
+        { "name": "Ace Combat 8: Wings of Theve", "subtitle": "Bandai Namco Aces / Bandai Namco" },
+        { "name": "Gears of War: E-Day", "subtitle": "The Coalition / Xbox Game Studios" },
+        { "name": "Onimusha: Way of the Sword", "subtitle": "Capcom" },
+        { "name": "Phantom Blade Zero", "subtitle": "S-GAME" },
+        { "name": "Saros", "subtitle": "Housemarque / Sony Interactive" }
+      ]
+    },
+    {
+      "slug": "best-action-adventure-game",
+      "name": "Melhor Jogo de Ação/Aventura",
+      "nominees": [
+        { "name": "007 First Light", "subtitle": "IO Interactive" },
+        { "name": "Control Resonant", "subtitle": "Remedy / Annapurna" },
+        { "name": "Grand Theft Auto VI", "subtitle": "Rockstar Games" },
+        { "name": "Pragmata", "subtitle": "Capcom" },
+        { "name": "Resident Evil Requiem", "subtitle": "Capcom" },
+        { "name": "The Legend of Zelda: Ocarina of Time", "subtitle": "Nintendo" }
+      ]
+    },
+    {
+      "slug": "best-rpg",
+      "name": "Melhor RPG",
+      "nominees": [
+        { "name": "Final Fantasy Resonance", "subtitle": "Lancarse / Square Enix" },
+        { "name": "Fire Emblem: Fortune's Weave", "subtitle": "Intelligent Systems / Nintendo" },
+        { "name": "Monster Hunter Stories 3: Twisted Reflection", "subtitle": "Capcom" },
+        { "name": "The Blood of Dawnwalker", "subtitle": "Rebel Wolves / Bandai Namco" },
+        { "name": "Trails in the Sky 2nd Chapter", "subtitle": "Nihon Falcom / GungHo" }
+      ]
+    },
+    {
+      "slug": "best-sim-strategy-game",
+      "name": "Melhor Jogo de Simulação/Estratégia",
+      "nominees": [
+        { "name": "Mewgenics", "subtitle": "Edmund McMillen e Tyler Glaiel" },
+        { "name": "Planet Zoo 2", "subtitle": "Frontier Developments" },
+        { "name": "Pokémon Pokopia", "subtitle": "Game Freak / Omega Force / Nintendo" },
+        { "name": "Slay the Spire 2", "subtitle": "Mega Crit" },
+        { "name": "Star Wars Zero Company", "subtitle": "Bit Reactor / Electronic Arts" }
+      ]
+    },
+    {
+      "slug": "best-fighting-game",
+      "name": "Melhor Jogo de Luta",
+      "nominees": [
+        { "name": "2XKO", "subtitle": "Riot Games" },
+        { "name": "Avatar Legends: The Fighting Game", "subtitle": "Gameplay Group / Paramount Games" },
+        { "name": "Invincible VS", "subtitle": "Quarter Up / Skybound Games" },
+        { "name": "Marvel Tōkon: Fighting Souls", "subtitle": "Arc System Works / Sony Interactive" },
+        { "name": "My Hero Academia: All's Justice", "subtitle": "Byking / Bandai Namco" }
+      ]
+    },
+    {
+      "slug": "best-family-game",
+      "name": "Melhor Jogo para a Família",
+      "nominees": [
+        { "name": "Big Walk", "subtitle": "House House / Panic" },
+        { "name": "Lego Batman: Legacy of the Dark Knight", "subtitle": "TT Games / Warner Bros. Games" },
+        { "name": "Nintendo Switch Sports Resort", "subtitle": "Nintendo" },
+        { "name": "Pokémon Pokopia", "subtitle": "Game Freak / Omega Force / Nintendo" },
+        { "name": "Yoshi and the Mysterious Book", "subtitle": "Good-Feel / Nintendo" }
+      ]
+    },
+    {
+      "slug": "best-sports-racing-game",
+      "name": "Melhor Jogo de Esporte/Corrida",
+      "nominees": [
+        { "name": "EA Sports FC 27", "subtitle": "EA Vancouver / EA Romania / EA Sports" },
+        { "name": "Forza Horizon 6", "subtitle": "Playground Games / Xbox Game Studios" },
+        { "name": "Nintendo Switch Sports Resort", "subtitle": "Nintendo" },
+        { "name": "Screamer", "subtitle": "Milestone" },
+        { "name": "Star Wars: Galactic Racer", "subtitle": "Fuse Games / Secret Mode" }
+      ]
+    },
+    {
+      "slug": "best-multiplayer",
+      "name": "Melhor Multiplayer",
+      "nominees": [
+        { "name": "Big Walk", "subtitle": "House House / Panic" },
+        { "name": "Call of Duty: Modern Warfare 4", "subtitle": "Infinity Ward / Activision" },
+        { "name": "Gears of War: E-Day", "subtitle": "The Coalition / Xbox Game Studios" },
+        { "name": "Marathon", "subtitle": "Bungie / Sony Interactive" },
+        { "name": "Meccha Chameleon", "subtitle": "Lemorion_1224" },
+        { "name": "Orbitals", "subtitle": "Shapefarm / Kepler" }
+      ]
+    },
+    {
+      "slug": "best-ongoing-game",
+      "name": "Melhor Jogo em Andamento",
+      "nominees": [
+        { "name": "Arc Raiders", "subtitle": "Embark Studios" },
+        { "name": "Final Fantasy XIV", "subtitle": "Square Enix" },
+        { "name": "Fortnite", "subtitle": "Epic Games" },
+        { "name": "No Man's Sky", "subtitle": "Hello Games" },
+        { "name": "The Witcher 3: Wild Hunt", "subtitle": "CD Projekt Red" }
+      ]
+    },
+    {
+      "slug": "best-community-support",
+      "name": "Melhor Suporte à Comunidade",
+      "nominees": [
+        { "name": "Crimson Desert", "subtitle": "Pearl Abyss" },
+        { "name": "Helldivers 2", "subtitle": "Arrowhead Game Studios / Sony Interactive" },
+        { "name": "No Man's Sky", "subtitle": "Hello Games" },
+        { "name": "The Witcher 3: Wild Hunt", "subtitle": "CD Projekt Red" },
+        { "name": "Warframe", "subtitle": "Digital Extremes" }
+      ]
+    },
+    {
+      "slug": "best-vr-ar-game",
+      "name": "Melhor Jogo de VR/AR",
+      "nominees": [
+        { "name": "Forefront", "subtitle": "Triangle Factory" },
+        { "name": "Into the Radius 2", "subtitle": "CM Immersive" },
+        { "name": "Little Nightmares VR: Altered Echoes", "subtitle": "ICONIK / Bandai Namco" },
+        { "name": "Teenage Mutant Ninja Turtles: Empire City", "subtitle": "Cortopia Studios / Beyond Frames" },
+        { "name": "Thief VR: Legacy of Shadow", "subtitle": "Maze Theory / Vertigo Games" }
+      ]
+    },
+    {
+      "slug": "best-mobile-game",
+      "name": "Melhor Jogo Mobile",
+      "nominees": [
+        { "name": "Arknights: Endfield", "subtitle": "Hypergryph / GRYPHLINE" },
+        { "name": "Monster Hunter Outlanders", "subtitle": "TiMi Studio Group / Level Infinite" },
+        { "name": "Neverness to Everness", "subtitle": "Hotta Studio / Perfect World Games" },
+        { "name": "Pokémon Champions", "subtitle": "The Pokémon Works / The Pokémon Company" },
+        { "name": "Where Winds Meet", "subtitle": "Everstone Studio / NetEase Games" }
+      ]
+    },
+    {
+      "slug": "innovation-in-accessibility",
+      "name": "Inovação em Acessibilidade",
+      "nominees": [
+        { "name": "Assassin's Creed Black Flag Resynced", "subtitle": "Ubisoft Singapore / Ubisoft" },
+        { "name": "Forza Horizon 6", "subtitle": "Playground Games / Xbox Game Studios" },
+        { "name": "Gears of War: E-Day", "subtitle": "The Coalition / Xbox Game Studios" },
+        { "name": "Marvel's Wolverine", "subtitle": "Insomniac Games / Sony Interactive" },
+        { "name": "Rhythm Heaven Groove", "subtitle": "Nintendo" }
+      ]
+    },
+    {
+      "slug": "best-user-creation",
+      "name": "Melhor Criação de Usuário",
+      "nominees": [
+        { "name": "A Dream of Silence: Revamped", "subtitle": "lizardphunk — Baldur's Gate 3" },
+        { "name": "Create Aeronautics", "subtitle": "Simulated Team — Minecraft" },
+        { "name": "Nopixel V", "subtitle": "Nopixel Studios — Grand Theft Auto Online" },
+        { "name": "Star Wars Droid Tycoon", "subtitle": "FOAD — Fortnite" },
+        { "name": "TTK Testing", "subtitle": "Sable Digital — Roblox" }
+      ]
+    },
+    {
+      "slug": "best-adaptation",
+      "name": "Melhor Adaptação",
+      "nominees": [
+        { "name": "Cyberpunk: Edgerunners (Temporada 2)", "subtitle": "Studio Trigger / CD Projekt Red / Netflix" },
+        { "name": "Fallout (Temporada 2)", "subtitle": "Kilter Films / Bethesda / Amazon MGM Studios" },
+        { "name": "Mortal Kombat II", "subtitle": "New Line Cinema / Atomic Monster / Warner Bros. Pictures" },
+        { "name": "Resident Evil", "subtitle": "Constantin / PlayStation Productions / Columbia Pictures" },
+        { "name": "The Super Mario Galaxy Movie", "subtitle": "Illumination / Nintendo / Universal Pictures" }
+      ]
+    },
+    {
+      "slug": "content-creator-of-the-year",
+      "name": "Criador de Conteúdo do Ano",
+      "nominees": [
+        { "name": "CDawg" },
+        { "name": "Cellbit" },
+        { "name": "IShowSpeed" },
+        { "name": "lilsimsie" },
+        { "name": "ohnePixel" }
+      ]
+    },
+    {
+      "slug": "most-anticipated-game",
+      "name": "Jogo Mais Aguardado",
+      "nominees": [
+        { "name": "Fable", "subtitle": "Playground Games / Xbox Game Studios" },
+        { "name": "Final Fantasy VII Revelation", "subtitle": "Square Enix" },
+        { "name": "God of War Laufey", "subtitle": "Santa Monica Studio / Sony Interactive" },
+        { "name": "Resident Evil Veronica", "subtitle": "Capcom" },
+        { "name": "The Witcher 4", "subtitle": "CD Projekt Red" }
+      ]
+    }
+  ]
+}

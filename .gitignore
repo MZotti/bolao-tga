@@ -83,3 +83,4 @@ dist-ssr
 ssh.md
 bolao
 bolao.pub
+*.local.json

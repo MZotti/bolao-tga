@@ -1,0 +1,116 @@
+// Schema do Bolão TGA
+// Docs: https://pris.ly/d/prisma-schema
+//
+// A URL de conexão fica em prisma.config.ts (lida de DATABASE_URL no .env).
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  // O Nest compila para CommonJS
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Role {
+  ADMIN
+  PLAYER
+}
+
+model User {
+  id           String   @id @default(uuid(7)) @db.Uuid
+  // Nome exibido no ranking
+  name         String
+  // Usado no login; sempre salvo em minúsculas e sem espaços
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  role         Role     @default(PLAYER)
+  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  predictions Prediction[]
+
+  @@map("users")
+}
+
+model Category {
+  id        String  @id @default(uuid(7)) @db.Uuid
+  // Identificador estável (ex.: "game-of-the-year"), usado pelo seed
+  slug      String  @unique
+  name      String
+  // Ordem de exibição na tela de palpites
+  sortOrder Int     @map("sort_order")
+  // Pontos por acerto (por enquanto 1 para todas)
+  points    Int     @default(1)
+  // Marca a categoria de GOTY, usada no critério de desempate
+  isGoty    Boolean @default(false) @map("is_goty")
+
+  // Vencedor, definido pelo admin durante a cerimônia.
+  // A regra "o vencedor precisa ser um indicado desta categoria" é validada na API.
+  winnerNomineeId String?  @unique @map("winner_nominee_id") @db.Uuid
+  winner          Nominee? @relation("CategoryWinner", fields: [winnerNomineeId], references: [id], onDelete: SetNull)
+
+  nominees    Nominee[]    @relation("CategoryNominees")
+  predictions Prediction[]
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("categories")
+}
+
+model Nominee {
+  id         String   @id @default(uuid(7)) @db.Uuid
+  categoryId String   @map("category_id") @db.Uuid
+  category   Category @relation("CategoryNominees", fields: [categoryId], references: [id], onDelete: Cascade)
+
+  // Título do jogo ou nome da pessoa
+  name      String
+  // Informação complementar (ex.: estúdio/publisher, ou o jogo de um ator)
+  subtitle  String?
+  imageUrl  String? @map("image_url")
+  sortOrder Int     @map("sort_order")
+
+  predictions Prediction[]
+  winnerOf    Category?    @relation("CategoryWinner")
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Alvo da FK composta em Prediction (garante indicado da mesma categoria)
+  @@unique([id, categoryId])
+  @@unique([categoryId, name])
+  @@map("nominees")
+}
+
+model Prediction {
+  id         String @id @default(uuid(7)) @db.Uuid
+  userId     String @map("user_id") @db.Uuid
+  categoryId String @map("category_id") @db.Uuid
+  nomineeId  String @map("nominee_id") @db.Uuid
+
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  // FK composta: o banco recusa palpite em indicado de outra categoria
+  nominee  Nominee  @relation(fields: [nomineeId, categoryId], references: [id, categoryId], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt DateTime @updatedAt @map("updated_at") @db.Timestamptz
+
+  // Um palpite por usuário por categoria
+  @@unique([userId, categoryId])
+  @@index([nomineeId, categoryId])
+  @@map("predictions")
+}
+
+// Configurações do bolão (linha única, id = 1)
+model Settings {
+  id                Int       @id @default(1)
+  // Após este horário, palpites não podem mais ser criados/alterados
+  predictionsLockAt DateTime? @map("predictions_lock_at") @db.Timestamptz
+  updatedAt         DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+
+  @@map("settings")
+}
