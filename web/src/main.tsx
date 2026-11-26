@@ -1,7 +1,9 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import './index.css'
-import App from './App.tsx'
+// Fontes servidas pelo próprio app (sem depender do Google Fonts)
+import '@fontsource-variable/inter'
+import '@fontsource-variable/oswald'
+import { App } from '@/app/App'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

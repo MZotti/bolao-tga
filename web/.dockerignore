@@ -1,0 +1,9 @@
+# Não enviar para o build do Docker
+node_modules
+dist
+*.log
+.env
+.env.*
+
+Dockerfile
+.dockerignore
