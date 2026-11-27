@@ -49,6 +49,38 @@ export function useSetWinner() {
   })
 }
 
+// ---------- Imagens dos indicados ----------
+
+interface NomineeImageResponse {
+  name: string
+  imageUrl: string | null
+  updated: number
+}
+
+/**
+ * Define (ou remove, com null) a imagem de um indicado e de todos os
+ * indicados com o mesmo nome (o mesmo jogo concorre em várias categorias).
+ */
+export function useUpdateNomineeImage() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ nomineeId, imageUrl }: { nomineeId: string; imageUrl: string | null }) =>
+      api<NomineeImageResponse>(`/nominees/${nomineeId}/image`, {
+        method: 'PATCH',
+        body: { imageUrl, applyToSameName: true },
+      }),
+    onSuccess: ({ name, imageUrl }) => {
+      queryClient.setQueryData<Category[]>(categoryKeys.all, (old) =>
+        old?.map((c) => ({
+          ...c,
+          nominees: c.nominees.map((n) => (n.name === name ? { ...n, imageUrl } : n)),
+        })),
+      )
+    },
+    onError: notifyError('Imagem não salva'),
+  })
+}
+
 // ---------- Bloqueio ----------
 
 export function useUpdateLock() {

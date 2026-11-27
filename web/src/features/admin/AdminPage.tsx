@@ -1,12 +1,13 @@
 import { Container, Stack, Tabs } from '@chakra-ui/react'
-import { LuClock, LuTrophy, LuUsers } from 'react-icons/lu'
+import { LuClock, LuImage, LuTrophy, LuUsers } from 'react-icons/lu'
 import { useSearchParams } from 'react-router'
 import { PageHeader } from '@/components/layout/PageHeader'
+import { ImagesPanel } from './ImagesPanel'
 import { LockPanel } from './LockPanel'
 import { ResultsPanel } from './ResultsPanel'
 import { UsersPanel } from './UsersPanel'
 
-const TABS = ['resultados', 'bloqueio', 'participantes'] as const
+const TABS = ['resultados', 'bloqueio', 'participantes', 'imagens'] as const
 type Tab = (typeof TABS)[number]
 
 export function AdminPage() {
@@ -25,7 +26,7 @@ export function AdminPage() {
           variant="line"
           lazyMount
         >
-          <Tabs.List mb="6">
+          <Tabs.List mb="6" overflowX="auto" overflowY="hidden">
             <Tabs.Trigger value="resultados">
               <LuTrophy /> Resultados
             </Tabs.Trigger>
@@ -34,6 +35,9 @@ export function AdminPage() {
             </Tabs.Trigger>
             <Tabs.Trigger value="participantes">
               <LuUsers /> Participantes
+            </Tabs.Trigger>
+            <Tabs.Trigger value="imagens">
+              <LuImage /> Imagens
             </Tabs.Trigger>
           </Tabs.List>
           <Tabs.Content value="resultados">
@@ -44,6 +48,9 @@ export function AdminPage() {
           </Tabs.Content>
           <Tabs.Content value="participantes">
             <UsersPanel />
+          </Tabs.Content>
+          <Tabs.Content value="imagens">
+            <ImagesPanel />
           </Tabs.Content>
         </Tabs.Root>
       </Stack>

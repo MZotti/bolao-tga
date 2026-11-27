@@ -1,5 +1,6 @@
 import { Badge, Box, Heading, HStack, Icon, RadioCard, SimpleGrid, Spinner, Stack, Text } from '@chakra-ui/react'
 import { LuCheck, LuCircleDashed, LuCrown, LuX } from 'react-icons/lu'
+import { NomineeImage } from './NomineeImage'
 import type { Category } from './types'
 
 interface CategoryCardProps {
@@ -14,6 +15,9 @@ export function CategoryCard({ category, position, locked, saving, onSelect }: C
   const { myNomineeId, winnerNomineeId } = category
   const hasWinner = winnerNomineeId !== null
   const hit = hasWinner && myNomineeId === winnerNomineeId
+  // Se algum indicado da categoria tem imagem, todos ganham o espaço da imagem
+  // (os sem imagem mostram um ícone), para os cards ficarem alinhados
+  const showImages = category.nominees.some((n) => n.imageUrl)
 
   return (
     <Box
@@ -72,8 +76,10 @@ export function CategoryCard({ category, position, locked, saving, onSelect }: C
                   // Depois do bloqueio, apaga visualmente quem não é palpite nem vencedor
                   opacity={locked && nominee.id !== myNomineeId && !isWinner ? 0.55 : 1}
                   borderColor={isWinner ? 'green.solid' : undefined}
+                  overflow="hidden"
                 >
                   <RadioCard.ItemHiddenInput />
+                  {showImages && <NomineeImage src={nominee.imageUrl} />}
                   <RadioCard.ItemControl>
                     <RadioCard.ItemContent>
                       <RadioCard.ItemText fontWeight="semibold">{nominee.name}</RadioCard.ItemText>
