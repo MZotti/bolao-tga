@@ -4,9 +4,11 @@ import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { PageSpinner } from '@/components/layout/PageSpinner'
 import { PasswordInput } from '@/components/ui/password-input'
+import { useMe } from '@/features/auth/api'
 import { useProgress } from '@/features/leaderboard/api'
 import { isApiError } from '@/lib/api'
 import { useCreateUser, useUsers } from './api'
+import { ResetPasswordDialog } from './ResetPasswordDialog'
 
 const createUserSchema = z.object({
   name: z.string().trim().min(1, 'Informe o nome').max(50, 'Use no máximo 50 caracteres'),
@@ -30,6 +32,7 @@ export function UsersPanel() {
 function UsersTable() {
   const users = useUsers()
   const progress = useProgress()
+  const { data: me } = useMe()
 
   if (users.isPending) return <PageSpinner />
   if (users.isError) {
@@ -54,6 +57,7 @@ function UsersTable() {
               <Table.ColumnHeader>E-mail</Table.ColumnHeader>
               <Table.ColumnHeader>Tipo</Table.ColumnHeader>
               <Table.ColumnHeader textAlign="end">Palpites</Table.ColumnHeader>
+              <Table.ColumnHeader textAlign="end">Senha</Table.ColumnHeader>
             </Table.Row>
           </Table.Header>
           <Table.Body>
@@ -61,7 +65,14 @@ function UsersTable() {
               const p = filledById.get(user.id)
               return (
                 <Table.Row key={user.id} bg="bg.panel">
-                  <Table.Cell fontWeight="semibold">{user.name}</Table.Cell>
+                  <Table.Cell fontWeight="semibold">
+                    {user.name}
+                    {user.mustChangePassword && (
+                      <Badge size="sm" colorPalette="orange" variant="subtle" ms="2" title="Ainda não escolheu uma senha própria">
+                        senha temporária
+                      </Badge>
+                    )}
+                  </Table.Cell>
                   <Table.Cell color="fg.muted">{user.email}</Table.Cell>
                   <Table.Cell>
                     <Badge size="sm" variant={user.role === 'ADMIN' ? 'solid' : 'outline'} colorPalette={user.role === 'ADMIN' ? 'gold' : 'gray'}>
@@ -70,6 +81,16 @@ function UsersTable() {
                   </Table.Cell>
                   <Table.Cell textAlign="end" fontVariantNumeric="tabular-nums">
                     {p ? `${p.filled}/${p.total}` : '—'}
+                  </Table.Cell>
+                  <Table.Cell textAlign="end">
+                    {/* A própria senha se troca pelo menu ("Alterar senha") */}
+                    {user.id === me?.id ? (
+                      <Text as="span" fontSize="xs" color="fg.subtle">
+                        você
+                      </Text>
+                    ) : (
+                      <ResetPasswordDialog user={user} />
+                    )}
                   </Table.Cell>
                 </Table.Row>
               )
@@ -149,6 +170,7 @@ function CreateUserForm() {
               <Field.Root invalid={!!errors.password}>
                 <Field.Label>Senha inicial</Field.Label>
                 <PasswordInput autoComplete="new-password" {...register('password')} />
+                <Field.HelperText>A pessoa escolhe uma senha própria no primeiro login.</Field.HelperText>
                 <Field.ErrorText>{errors.password?.message}</Field.ErrorText>
               </Field.Root>
               <Field.Root invalid={!!errors.role}>

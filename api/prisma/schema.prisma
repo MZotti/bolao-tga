@@ -4,10 +4,10 @@
 // A URL de conexão fica em prisma.config.ts (lida de DATABASE_URL no .env).
 
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
   // O Nest compila para CommonJS
-  moduleFormat = "cjs"
+  moduleFormat        = "cjs"
   // Imports com ".js" no client gerado. Fixado aqui porque, sem isso, o Prisma
   // deduz a extensão pelo tsconfig, e um ambiente sem tsconfig (ex.: build do
   // Docker) gerava imports ".ts", que quebram depois de compilados.
@@ -24,15 +24,20 @@ enum Role {
 }
 
 model User {
-  id           String   @id @default(uuid(7)) @db.Uuid
+  id                 String    @id @default(uuid(7)) @db.Uuid
   // Nome exibido no ranking
-  name         String
+  name               String
   // Usado no login; sempre salvo em minúsculas e sem espaços
-  email        String   @unique
-  passwordHash String   @map("password_hash")
-  role         Role     @default(PLAYER)
-  createdAt    DateTime @default(now()) @map("created_at") @db.Timestamptz
-  updatedAt    DateTime @updatedAt @map("updated_at") @db.Timestamptz
+  email              String    @unique
+  passwordHash       String    @map("password_hash")
+  role               Role      @default(PLAYER)
+  // true quando a senha foi definida pelo admin (redefinição ou cadastro manual):
+  // no próximo login a pessoa precisa escolher uma senha própria
+  mustChangePassword Boolean   @default(false) @map("must_change_password")
+  // Sessões emitidas antes deste momento deixam de valer (troca/redefinição de senha)
+  passwordChangedAt  DateTime? @map("password_changed_at") @db.Timestamptz
+  createdAt          DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  updatedAt          DateTime  @updatedAt @map("updated_at") @db.Timestamptz
 
   predictions Prediction[]
 

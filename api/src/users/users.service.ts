@@ -1,4 +1,8 @@
-import { ConflictException, Injectable } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { Prisma } from '../generated/prisma/client';
 import { hashPassword } from '../common/password';
 import { PrismaService } from '../prisma/prisma.service';
@@ -10,6 +14,7 @@ const publicUserSelect = {
   name: true,
   email: true,
   role: true,
+  mustChangePassword: true,
   createdAt: true,
 } satisfies Prisma.UserSelect;
 
@@ -21,10 +26,14 @@ export type PublicUser = Prisma.UserGetPayload<{
 export class UsersService {
   constructor(private readonly prisma: PrismaService) {}
 
-  findPublicById(id: string): Promise<PublicUser | null> {
+  /**
+   * Uso do AuthGuard: dados públicos + passwordChangedAt, para recusar
+   * sessões emitidas antes da última troca de senha.
+   */
+  findForSession(id: string) {
     return this.prisma.user.findUnique({
       where: { id },
-      select: publicUserSelect,
+      select: { ...publicUserSelect, passwordChangedAt: true },
     });
   }
 
@@ -34,6 +43,41 @@ export class UsersService {
     return this.prisma.user.findUnique({ where: { email } });
   }
 
+  // Uso interno da troca de senha: inclui o hash
+  findByIdWithHash(id: string) {
+    return this.prisma.user.findUnique({ where: { id } });
+  }
+
+  /**
+   * Grava uma nova senha e encerra as sessões abertas do usuário.
+   * temporary = true: senha definida pelo admin, a pessoa terá que trocar.
+   */
+  async setPassword(
+    id: string,
+    password: string,
+    { temporary }: { temporary: boolean },
+  ): Promise<PublicUser> {
+    try {
+      return await this.prisma.user.update({
+        where: { id },
+        data: {
+          passwordHash: await hashPassword(password),
+          mustChangePassword: temporary,
+          passwordChangedAt: new Date(),
+        },
+        select: publicUserSelect,
+      });
+    } catch (e) {
+      if (
+        e instanceof Prisma.PrismaClientKnownRequestError &&
+        e.code === 'P2025'
+      ) {
+        throw new NotFoundException('Usuário não encontrado');
+      }
+      throw e;
+    }
+  }
+
   list(): Promise<PublicUser[]> {
     return this.prisma.user.findMany({
       select: publicUserSelect,
@@ -41,7 +85,10 @@ export class UsersService {
     });
   }
 
-  async create(dto: CreateUserDto): Promise<PublicUser> {
+  async create(
+    dto: CreateUserDto,
+    options: { temporaryPassword: boolean },
+  ): Promise<PublicUser> {
     try {
       return await this.prisma.user.create({
         data: {
@@ -49,6 +96,8 @@ export class UsersService {
           email: dto.email,
           passwordHash: await hashPassword(dto.password),
           role: dto.role,
+          // Senha escolhida pelo admin: a pessoa troca no primeiro login
+          mustChangePassword: options.temporaryPassword,
         },
         select: publicUserSelect,
       });

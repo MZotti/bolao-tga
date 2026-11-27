@@ -1,6 +1,6 @@
 import { hashKey, type Query, type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, isApiError } from '@/lib/api'
-import type { LoginInput, RegisterInput, User } from './types'
+import type { ChangePasswordInput, LoginInput, RegisterInput, User } from './types'
 
 export const authKeys = {
   me: ['auth', 'me'] as const,
@@ -60,6 +60,20 @@ export function useRegister() {
     mutationFn: (input: RegisterInput) =>
       api<User>('/auth/register', { method: 'POST', body: input }),
     onSuccess: (user) => switchSession(queryClient, user),
+  })
+}
+
+/**
+ * Troca a própria senha. A API renova o cookie (as outras sessões são
+ * encerradas) e devolve o usuário já com mustChangePassword = false.
+ */
+export function useChangePassword() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (input: ChangePasswordInput) =>
+      api<User>('/auth/change-password', { method: 'POST', body: input }),
+    // Mesmo usuário: só atualiza o "me" (sem descartar o resto do cache)
+    onSuccess: (user) => queryClient.setQueryData(authKeys.me, user),
   })
 }
 

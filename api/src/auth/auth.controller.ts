@@ -18,6 +18,7 @@ import {
   SESSION_COOKIE,
   SESSION_TTL_SECONDS,
 } from './auth.types';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 
@@ -76,6 +77,22 @@ export class AuthController {
   @Get('me')
   me(@CurrentUser() user: AuthUser): AuthUser {
     return user;
+  }
+
+  /**
+   * Troca a própria senha (inclusive a temporária definida pelo admin).
+   * Encerra as outras sessões e renova o cookie de quem trocou.
+   */
+  // Limitado: evita tentativa e erro da senha atual com uma sessão roubada
+  @UseGuards(ThrottlerGuard)
+  @Post('change-password')
+  @HttpCode(HttpStatus.OK)
+  async changePassword(
+    @CurrentUser() user: AuthUser,
+    @Body() dto: ChangePasswordDto,
+    @Res({ passthrough: true }) res: Response,
+  ): Promise<AuthUser> {
+    return this.startSession(res, await this.auth.changePassword(user.id, dto));
   }
 
   private startSession(res: Response, { user, token }: Session): AuthUser {

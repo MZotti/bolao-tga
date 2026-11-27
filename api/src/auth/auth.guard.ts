@@ -10,6 +10,7 @@ import { UsersService } from '../users/users.service';
 import { IS_PUBLIC_KEY } from './auth.decorators';
 import {
   type AuthenticatedRequest,
+  isSessionRevoked,
   type JwtPayload,
   SESSION_COOKIE,
 } from './auth.types';
@@ -46,12 +47,23 @@ export class AuthGuard implements CanActivate {
       throw new UnauthorizedException('Sessão inválida ou expirada');
     }
 
-    // Busca o usuário a cada requisição: se ele for removido ou tiver a role
-    // alterada, isso vale imediatamente (custo irrelevante para 6 usuários).
-    const user = await this.users.findPublicById(payload.sub);
-    if (!user) throw new UnauthorizedException('Sessão inválida ou expirada');
+    // Busca o usuário a cada requisição: se ele for removido, tiver a role
+    // alterada ou a senha trocada, isso vale imediatamente (custo irrelevante
+    // para 6 usuários).
+    const found = await this.users.findForSession(payload.sub);
+    if (!found || isSessionRevoked(payload, found.passwordChangedAt)) {
+      throw new UnauthorizedException('Sessão inválida ou expirada');
+    }
 
-    req.user = user;
+    // passwordChangedAt fica de fora: req.user é o que a API pode devolver
+    req.user = {
+      id: found.id,
+      name: found.name,
+      email: found.email,
+      role: found.role,
+      mustChangePassword: found.mustChangePassword,
+      createdAt: found.createdAt,
+    };
     return true;
   }
 }

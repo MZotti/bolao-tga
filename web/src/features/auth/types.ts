@@ -6,7 +6,16 @@ export interface User {
   name: string
   email: string
   role: Role
+  /** Entrou com senha temporária definida pelo admin: precisa escolher uma nova */
+  mustChangePassword: boolean
   createdAt: string
+}
+
+// Espelha o ChangePasswordDto da API (api/src/auth/dto/change-password.dto.ts)
+export interface ChangePasswordInput {
+  /** Dispensada quando mustChangePassword = true */
+  currentPassword?: string
+  newPassword: string
 }
 
 export interface LoginInput {

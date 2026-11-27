@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ForbiddenException,
   Injectable,
   UnauthorizedException,
@@ -11,6 +12,7 @@ import { hashPassword, verifyPassword } from '../common/password';
 import { Role } from '../generated/prisma/client';
 import { UsersService } from '../users/users.service';
 import type { AuthUser, JwtPayload } from './auth.types';
+import type { ChangePasswordDto } from './dto/change-password.dto';
 import type { RegisterDto } from './dto/register.dto';
 
 export interface Session {
@@ -53,8 +55,43 @@ export class AuthService {
       name: found.name,
       email: found.email,
       role: found.role,
+      mustChangePassword: found.mustChangePassword,
       createdAt: found.createdAt,
     });
+  }
+
+  /**
+   * Troca a própria senha. Pede a senha atual, exceto quando a pessoa acabou
+   * de entrar com uma senha temporária definida pelo admin.
+   *
+   * A troca encerra as outras sessões (ver AuthGuard), então devolve uma
+   * sessão nova para quem trocou continuar logado.
+   */
+  async changePassword(
+    userId: string,
+    dto: ChangePasswordDto,
+  ): Promise<Session> {
+    const found = await this.users.findByIdWithHash(userId);
+    if (!found) throw new UnauthorizedException('Sessão inválida ou expirada');
+
+    // Erros 400 (e não 401): o front trata 401 como "sessão expirada" e desloga
+    if (!found.mustChangePassword) {
+      const valid =
+        !!dto.currentPassword &&
+        (await verifyPassword(dto.currentPassword, found.passwordHash));
+      if (!valid) throw new BadRequestException('Senha atual incorreta');
+    }
+
+    if (await verifyPassword(dto.newPassword, found.passwordHash)) {
+      throw new BadRequestException(
+        'A nova senha precisa ser diferente da atual',
+      );
+    }
+
+    const user = await this.users.setPassword(userId, dto.newPassword, {
+      temporary: false,
+    });
+    return this.createSession(user);
   }
 
   /**
@@ -73,12 +110,16 @@ export class AuthService {
       throw new ForbiddenException('Código de convite inválido');
     }
 
-    const user = await this.users.create({
-      name: dto.name,
-      email: dto.email,
-      password: dto.password,
-      role: Role.PLAYER,
-    });
+    const user = await this.users.create(
+      {
+        name: dto.name,
+        email: dto.email,
+        password: dto.password,
+        role: Role.PLAYER,
+      },
+      // A própria pessoa escolheu a senha
+      { temporaryPassword: false },
+    );
     return this.createSession(user);
   }
 

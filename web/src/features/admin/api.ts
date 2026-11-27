@@ -77,6 +77,19 @@ export function useUsers() {
   })
 }
 
+/**
+ * Define uma senha temporária para alguém (ex.: esqueceu a senha).
+ * A API encerra as sessões da pessoa, e no próximo login ela escolhe uma nova.
+ */
+export function useResetPassword() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: ({ userId, password }: { userId: string; password: string }) =>
+      api<User>(`/users/${userId}/password`, { method: 'PATCH', body: { password } }),
+    onSuccess: () => void queryClient.invalidateQueries({ queryKey: userKeys.all }),
+  })
+}
+
 export interface CreateUserInput {
   name: string
   email: string

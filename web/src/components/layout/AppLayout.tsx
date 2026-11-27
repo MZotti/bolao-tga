@@ -1,8 +1,8 @@
 import { Avatar, Box, Button, Container, Flex, HStack, Icon, Menu, Portal, Text } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
 import type { IconType } from 'react-icons'
-import { LuChevronDown, LuListChecks, LuLogOut, LuMedal, LuSettings, LuTrophy, LuUsers } from 'react-icons/lu'
-import { NavLink, Link as RouterLink, Outlet, useNavigate } from 'react-router'
+import { LuChevronDown, LuKeyRound, LuListChecks, LuLogOut, LuMedal, LuSettings, LuTrophy, LuUsers } from 'react-icons/lu'
+import { Navigate, NavLink, Link as RouterLink, Outlet, useLocation, useNavigate } from 'react-router'
 import { useLogout, useMe } from '@/features/auth/api'
 import type { User } from '@/features/auth/types'
 import { PredictionsStatusIcon } from '@/features/predictions/PredictionsStatusIcon'
@@ -95,7 +95,15 @@ function UserMenu({ user, items }: { user: User; items: NavEntry[] }) {
                 </RouterLink>
               </Menu.Item>
             ))}
-            <Menu.Separator />
+            {items.length > 0 && <Menu.Separator />}
+            {!user.mustChangePassword && (
+              <Menu.Item value="/trocar-senha" asChild>
+                <RouterLink to="/trocar-senha">
+                  <LuKeyRound />
+                  Alterar senha
+                </RouterLink>
+              </Menu.Item>
+            )}
             <Menu.Item
               value="logout"
               color="fg.error"
@@ -112,9 +120,18 @@ function UserMenu({ user, items }: { user: User; items: NavEntry[] }) {
   )
 }
 
+const CHANGE_PASSWORD_PATH = '/trocar-senha'
+
 export function AppLayout() {
   const { data: user } = useMe()
-  const items = user ? navFor(user) : []
+  const { pathname } = useLocation()
+  // Entrou com senha temporária: só sai da tela de troca depois de escolher a nova
+  const mustChangePassword = user?.mustChangePassword ?? false
+  const items = user && !mustChangePassword ? navFor(user) : []
+
+  if (mustChangePassword && pathname !== CHANGE_PASSWORD_PATH) {
+    return <Navigate to={CHANGE_PASSWORD_PATH} replace />
+  }
 
   return (
     <Flex direction="column" minH="100dvh">
