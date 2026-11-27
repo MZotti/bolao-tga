@@ -89,7 +89,7 @@ function InviteHint() {
         <Heading size="sm">Convidar pelo link</Heading>
         <Text fontSize="sm" color="fg.muted">
           Mande este link no grupo, completando com o código definido em <Code size="sm">SIGNUP_CODE</Code> no
-          .env da API. A pessoa cria a própria conta e já entra como player:
+          .env do servidor. A pessoa cria a própria conta e já entra como player:
         </Text>
         <Code size="sm" p="2" wordBreak="break-all">
           {link}SEU_CODIGO

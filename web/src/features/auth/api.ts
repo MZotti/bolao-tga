@@ -1,9 +1,28 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { hashKey, type Query, type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, isApiError } from '@/lib/api'
 import type { LoginInput, RegisterInput, User } from './types'
 
 export const authKeys = {
   me: ['auth', 'me'] as const,
+}
+
+const meHash = hashKey(authKeys.me)
+const isNotMe = (query: Query) => query.queryHash !== meHash
+
+/**
+ * Troca de sessão (login, cadastro, logout): define o usuário atual e descarta
+ * os dados da sessão anterior.
+ *
+ * Não usa queryClient.clear(): ele REMOVE as queries do cache, e componentes
+ * que continuam montados (como o header) ficam presos à query antiga e não
+ * veem a atualização. Por isso a query "me" é só atualizada, as queries em
+ * uso são resetadas (os observers são avisados e buscam de novo) e as que não
+ * estão em uso são removidas.
+ */
+function switchSession(queryClient: QueryClient, user: User | null) {
+  queryClient.setQueryData(authKeys.me, user)
+  queryClient.removeQueries({ predicate: isNotMe, type: 'inactive' })
+  void queryClient.resetQueries({ predicate: isNotMe, type: 'active' })
 }
 
 /** Usuário logado, ou null se não houver sessão. */
@@ -29,11 +48,8 @@ export function useLogin() {
   return useMutation({
     mutationFn: (input: LoginInput) =>
       api<User>('/auth/login', { method: 'POST', body: input }),
-    onSuccess: (user) => {
-      // Começa "do zero" com o novo usuário (nada em cache de outra sessão)
-      queryClient.clear()
-      queryClient.setQueryData(authKeys.me, user)
-    },
+    // Começa "do zero" com o novo usuário (nada em cache de outra sessão)
+    onSuccess: (user) => switchSession(queryClient, user),
   })
 }
 
@@ -43,10 +59,7 @@ export function useRegister() {
   return useMutation({
     mutationFn: (input: RegisterInput) =>
       api<User>('/auth/register', { method: 'POST', body: input }),
-    onSuccess: (user) => {
-      queryClient.clear()
-      queryClient.setQueryData(authKeys.me, user)
-    },
+    onSuccess: (user) => switchSession(queryClient, user),
   })
 }
 
@@ -54,10 +67,7 @@ export function useLogout() {
   const queryClient = useQueryClient()
   return useMutation({
     mutationFn: () => api<void>('/auth/logout', { method: 'POST' }),
-    onSettled: () => {
-      // Mesmo se a chamada falhar, limpa os dados locais do usuário
-      queryClient.clear()
-      queryClient.setQueryData(authKeys.me, null)
-    },
+    // Mesmo se a chamada falhar, limpa os dados locais do usuário
+    onSettled: () => switchSession(queryClient, null),
   })
 }
