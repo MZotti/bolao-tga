@@ -37,6 +37,29 @@ export class CategoriesService {
     }));
   }
 
+  /**
+   * Define (ou remove, com null) a imagem de um indicado. Com applyToSameName,
+   * vale para todos os indicados com o mesmo nome: o mesmo jogo concorre em
+   * várias categorias, e assim o admin cadastra a imagem uma vez só.
+   */
+  async updateNomineeImage(
+    id: string,
+    imageUrl: string | null,
+    { applyToSameName }: { applyToSameName: boolean },
+  ) {
+    const nominee = await this.prisma.nominee.findUnique({
+      where: { id },
+      select: { name: true },
+    });
+    if (!nominee) throw new NotFoundException('Indicado não encontrado');
+
+    const { count } = await this.prisma.nominee.updateMany({
+      where: applyToSameName ? { name: nominee.name } : { id },
+      data: { imageUrl },
+    });
+    return { name: nominee.name, imageUrl, updated: count };
+  }
+
   /** 404 se a categoria não existe. */
   async assertCategoryExists(categoryId: string): Promise<void> {
     const exists = await this.prisma.category.count({
