@@ -18,6 +18,14 @@ export interface ChangePasswordInput {
   newPassword: string
 }
 
+// Espelha o UpdateProfileDto da API (api/src/auth/dto/update-profile.dto.ts)
+export interface UpdateProfileInput {
+  name: string
+  email: string
+  /** Obrigatória só quando o e-mail muda */
+  currentPassword?: string
+}
+
 export interface LoginInput {
   email: string
   password: string

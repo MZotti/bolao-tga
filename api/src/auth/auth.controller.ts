@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
   Res,
   UseGuards,
@@ -21,6 +22,7 @@ import {
 import { ChangePasswordDto } from './dto/change-password.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
+import { UpdateProfileDto } from './dto/update-profile.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -77,6 +79,17 @@ export class AuthController {
   @Get('me')
   me(@CurrentUser() user: AuthUser): AuthUser {
     return user;
+  }
+
+  /** Altera o próprio nome e e-mail (trocar o e-mail pede a senha atual). */
+  // Limitado: evita tentativa e erro da senha atual com uma sessão roubada
+  @UseGuards(ThrottlerGuard)
+  @Patch('me')
+  updateMe(
+    @CurrentUser() user: AuthUser,
+    @Body() dto: UpdateProfileDto,
+  ): Promise<AuthUser> {
+    return this.auth.updateProfile(user.id, dto);
   }
 
   /**

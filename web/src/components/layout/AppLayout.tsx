@@ -1,7 +1,7 @@
 import { Avatar, Box, Button, Container, Flex, HStack, Icon, Menu, Portal, Text } from '@chakra-ui/react'
 import type { ReactNode } from 'react'
 import type { IconType } from 'react-icons'
-import { LuChevronDown, LuKeyRound, LuListChecks, LuLogOut, LuMedal, LuSettings, LuTrophy, LuUsers } from 'react-icons/lu'
+import { LuChevronDown, LuKeyRound, LuListChecks, LuLogOut, LuMedal, LuSettings, LuTrophy, LuUserPen, LuUsers } from 'react-icons/lu'
 import { Navigate, NavLink, Link as RouterLink, Outlet, useLocation, useNavigate } from 'react-router'
 import { useLogout, useMe } from '@/features/auth/api'
 import type { User } from '@/features/auth/types'
@@ -97,12 +97,20 @@ function UserMenu({ user, items }: { user: User; items: NavEntry[] }) {
             ))}
             {items.length > 0 && <Menu.Separator />}
             {!user.mustChangePassword && (
-              <Menu.Item value="/trocar-senha" asChild>
-                <RouterLink to="/trocar-senha">
-                  <LuKeyRound />
-                  Alterar senha
-                </RouterLink>
-              </Menu.Item>
+              <>
+                <Menu.Item value="/meus-dados" asChild>
+                  <RouterLink to="/meus-dados">
+                    <LuUserPen />
+                    Meus dados
+                  </RouterLink>
+                </Menu.Item>
+                <Menu.Item value="/trocar-senha" asChild>
+                  <RouterLink to="/trocar-senha">
+                    <LuKeyRound />
+                    Alterar senha
+                  </RouterLink>
+                </Menu.Item>
+              </>
             )}
             <Menu.Item
               value="logout"

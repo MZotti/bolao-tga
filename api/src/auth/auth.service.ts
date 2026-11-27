@@ -14,6 +14,7 @@ import { UsersService } from '../users/users.service';
 import type { AuthUser, JwtPayload } from './auth.types';
 import type { ChangePasswordDto } from './dto/change-password.dto';
 import type { RegisterDto } from './dto/register.dto';
+import type { UpdateProfileDto } from './dto/update-profile.dto';
 
 export interface Session {
   user: AuthUser;
@@ -92,6 +93,37 @@ export class AuthService {
       temporary: false,
     });
     return this.createSession(user);
+  }
+
+  /**
+   * Altera o próprio nome e e-mail. Trocar o e-mail (o login da conta) exige
+   * a senha atual. A sessão continua valendo: o token guarda só o id.
+   */
+  async updateProfile(
+    userId: string,
+    dto: UpdateProfileDto,
+  ): Promise<AuthUser> {
+    const found = await this.users.findByIdWithHash(userId);
+    if (!found) throw new UnauthorizedException('Sessão inválida ou expirada');
+
+    if (dto.email !== found.email) {
+      // 400 (e não 401): o front trata 401 como "sessão expirada" e desloga
+      const valid =
+        !!dto.currentPassword &&
+        (await verifyPassword(dto.currentPassword, found.passwordHash));
+      if (!valid) {
+        throw new BadRequestException(
+          dto.currentPassword
+            ? 'Senha atual incorreta'
+            : 'Informe a senha atual para trocar o e-mail',
+        );
+      }
+    }
+
+    return this.users.updateProfile(userId, {
+      name: dto.name,
+      email: dto.email,
+    });
   }
 
   /**

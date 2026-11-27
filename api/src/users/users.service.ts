@@ -78,6 +78,30 @@ export class UsersService {
     }
   }
 
+  /** Altera nome e e-mail (e-mail já normalizado). */
+  async updateProfile(
+    id: string,
+    data: { name: string; email: string },
+  ): Promise<PublicUser> {
+    try {
+      return await this.prisma.user.update({
+        where: { id },
+        data,
+        select: publicUserSelect,
+      });
+    } catch (e) {
+      if (e instanceof Prisma.PrismaClientKnownRequestError) {
+        if (e.code === 'P2002') {
+          throw new ConflictException('Este e-mail já está em uso');
+        }
+        if (e.code === 'P2025') {
+          throw new NotFoundException('Usuário não encontrado');
+        }
+      }
+      throw e;
+    }
+  }
+
   list(): Promise<PublicUser[]> {
     return this.prisma.user.findMany({
       select: publicUserSelect,

@@ -3,6 +3,7 @@ import { AppLayout } from '@/components/layout/AppLayout'
 import { AdminPage } from '@/features/admin/AdminPage'
 import { ChangePasswordPage } from '@/features/auth/ChangePasswordPage'
 import { LoginPage } from '@/features/auth/LoginPage'
+import { ProfilePage } from '@/features/auth/ProfilePage'
 import { RegisterPage } from '@/features/auth/RegisterPage'
 import { RequireAuth } from '@/features/auth/RequireAuth'
 import { RankingPage } from '@/features/leaderboard/RankingPage'
@@ -25,6 +26,15 @@ export const router = createBrowserRouter([
         element: (
           <RequireAuth>
             <ChangePasswordPage />
+          </RequireAuth>
+        ),
+      },
+      {
+        // Nome e e-mail da própria conta (pelo menu do usuário)
+        path: 'meus-dados',
+        element: (
+          <RequireAuth>
+            <ProfilePage />
           </RequireAuth>
         ),
       },

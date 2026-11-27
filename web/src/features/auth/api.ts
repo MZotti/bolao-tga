@@ -1,6 +1,6 @@
 import { hashKey, type Query, type QueryClient, useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { api, isApiError } from '@/lib/api'
-import type { ChangePasswordInput, LoginInput, RegisterInput, User } from './types'
+import type { ChangePasswordInput, LoginInput, RegisterInput, UpdateProfileInput, User } from './types'
 
 export const authKeys = {
   me: ['auth', 'me'] as const,
@@ -74,6 +74,19 @@ export function useChangePassword() {
       api<User>('/auth/change-password', { method: 'POST', body: input }),
     // Mesmo usuário: só atualiza o "me" (sem descartar o resto do cache)
     onSuccess: (user) => queryClient.setQueryData(authKeys.me, user),
+  })
+}
+
+/** Altera o próprio nome e e-mail. */
+export function useUpdateProfile() {
+  const queryClient = useQueryClient()
+  return useMutation({
+    mutationFn: (input: UpdateProfileInput) => api<User>('/auth/me', { method: 'PATCH', body: input }),
+    onSuccess: (user) => {
+      queryClient.setQueryData(authKeys.me, user)
+      // O nome aparece no ranking, nos palpites da galera e no painel do admin
+      void queryClient.invalidateQueries({ predicate: isNotMe })
+    },
   })
 }
 
