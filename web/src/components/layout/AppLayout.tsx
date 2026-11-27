@@ -2,7 +2,7 @@ import { Avatar, Box, Button, Container, Flex, HStack, Icon, Menu, Portal, Text 
 import type { ReactNode } from 'react'
 import type { IconType } from 'react-icons'
 import { LuChevronDown, LuKeyRound, LuListChecks, LuLogOut, LuMedal, LuSettings, LuTrophy, LuUserPen, LuUsers } from 'react-icons/lu'
-import { Navigate, NavLink, Link as RouterLink, Outlet, useLocation, useNavigate } from 'react-router'
+import { Navigate, NavLink, Link as RouterLink, Outlet, useLocation, useNavigate, Link } from 'react-router'
 import { useLogout, useMe } from '@/features/auth/api'
 import type { User } from '@/features/auth/types'
 import { PredictionsStatusIcon } from '@/features/predictions/PredictionsStatusIcon'
@@ -179,7 +179,7 @@ export function AppLayout() {
       <Box as="footer" borderTopWidth="1px" borderColor="border" py="4">
         <Container maxW="6xl">
           <Text fontSize="xs" color="fg.subtle" textAlign="center">
-            Bolão entre amigos · sem vínculo oficial com The Game Awards
+            Bolão entre amigos · sem vínculo oficial com The Game Awards - Desenvolvido por <Link to="https://github.com/MZotti">Marcos Zotti</Link>
           </Text>
         </Container>
       </Box>
