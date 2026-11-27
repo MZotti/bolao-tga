@@ -1,14 +1,18 @@
 import { Avatar, Box, Button, Container, Flex, HStack, Icon, Menu, Portal, Text } from '@chakra-ui/react'
+import type { ReactNode } from 'react'
 import type { IconType } from 'react-icons'
 import { LuChevronDown, LuListChecks, LuLogOut, LuMedal, LuSettings, LuTrophy, LuUsers } from 'react-icons/lu'
 import { NavLink, Link as RouterLink, Outlet, useNavigate } from 'react-router'
 import { useLogout, useMe } from '@/features/auth/api'
 import type { User } from '@/features/auth/types'
+import { PredictionsStatusIcon } from '@/features/predictions/PredictionsStatusIcon'
 
 interface NavEntry {
   to: string
   label: string
   icon: IconType
+  /** Indicador exibido à esquerda do texto (ex.: status dos palpites) */
+  status?: ReactNode
 }
 
 /** Itens de navegação de cada tipo de usuário. */
@@ -18,15 +22,18 @@ function navFor(user: User): NavEntry[] {
     { to: '/galera', label: 'Palpites da galera', icon: LuUsers },
   ]
   return user.role === 'PLAYER'
-    ? [{ to: '/palpites', label: 'Meus palpites', icon: LuListChecks }, ...shared]
+    ? [{ to: '/palpites', label: 'Meus palpites', icon: LuListChecks, status: <PredictionsStatusIcon /> }, ...shared]
     : [...shared, { to: '/admin', label: 'Painel do admin', icon: LuSettings }]
 }
 
-function NavItem({ to, children }: { to: string; children: string }) {
+function NavItem({ to, status, children }: { to: string; status?: ReactNode; children: string }) {
   return (
     <NavLink to={to}>
       {({ isActive }) => (
         <Text
+          display="inline-flex"
+          alignItems="center"
+          gap="1.5"
           fontSize="xs"
           fontWeight="semibold"
           letterSpacing="0.15em"
@@ -38,6 +45,7 @@ function NavItem({ to, children }: { to: string; children: string }) {
           py="1"
           whiteSpace="nowrap"
         >
+          {status}
           {children}
         </Text>
       )}
@@ -79,6 +87,11 @@ function UserMenu({ user, items }: { user: User; items: NavEntry[] }) {
                 <RouterLink to={item.to}>
                   <Icon as={item.icon} />
                   {item.label}
+                  {item.status && (
+                    <Box as="span" display="inline-flex" ms="auto">
+                      {item.status}
+                    </Box>
+                  )}
                 </RouterLink>
               </Menu.Item>
             ))}
@@ -122,7 +135,7 @@ export function AppLayout() {
                 {/* No celular, a navegação fica dentro do menu do usuário */}
                 <HStack as="nav" gap="6" display={{ base: 'none', md: 'flex' }}>
                   {items.map((item) => (
-                    <NavItem key={item.to} to={item.to}>
+                    <NavItem key={item.to} to={item.to} status={item.status}>
                       {item.label}
                     </NavItem>
                   ))}

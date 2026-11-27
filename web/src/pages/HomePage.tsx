@@ -38,6 +38,11 @@ export function HomePage() {
               fontSize={{ base: '7xl', md: '9xl' }}
               fontWeight="700"
               letterSpacing="0.01em"
+              // O Heading aplica a altura de linha do tamanho padrão (~30px), que não
+              // acompanha o fontSize grande: a caixa ficava baixa, o texto vazava sobre
+              // o resto e o gradiente (recortado na caixa) só pintava uma faixa.
+              // 1.3 dá folga para o til do "Ã" ficar dentro da área pintada.
+              lineHeight="1.3"
               // Gradiente metálico no título, lembrando a estatueta
               bgImage="linear-gradient(180deg, #FFFFFF 0%, #F5EBC6 45%, #D4AF37 100%)"
               bgClip="text"
